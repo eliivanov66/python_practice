@@ -11,6 +11,12 @@ def generate_fibonacci(arg_input) :
     result = int ( ((Fi ** arg_input) - (- Fi) ** (- arg_input)) / (2.0 * Fi - 1.0) )
     return result
 
+mem = {0:0, 1:1, 2:1}
+def new_generate_fibonacci(arg_input): 
+    if arg_input not in mem:
+       mem[arg_input]=new_generate_fibonacci(arg_input-1) + new_generate_fibonacci(arg_input-2)
+    return mem[arg_input]
+
 # переменные
 in_value = ""
 out_quality_bad = True
@@ -33,6 +39,7 @@ out_value = int(in_value)
 
 # калькуляция
 for i in range( - out_value, out_value + 1) :
+    #out_result.append( new_generate_fibonacci(i))
     out_result.append( generate_fibonacci(i) )
 
 # вывод результата
