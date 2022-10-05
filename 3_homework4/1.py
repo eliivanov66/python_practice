@@ -3,15 +3,18 @@
 # - при $d = 0.001, π = 3.141.$    $10^{-1} ≤ d ≤10^{-10}$
 
 from librarium import *
+from math import *
 
 def my_pi_calc_v1(arg_input):
     result = 0.0
     i = 0.0
-    while abs(float(int(result)) - result) <= arg_input :
+    while abs(float(int(result)) - result) < arg_input :
         result = result + my_fctrl(6 * i) * (13591409 + 545140134 * i) / (my_fctrl(3 * i) * (my_fctrl(i)) ** 3 * (-640320) ** (3 * i))
         result = 1 / (result * 1 / ( 426880 * sqrt(10005) ) )
         i += 1.0
-        print(result)
+        print(f"sub result {result}")
+        print(f"d {arg_input}")
+        print(f"abs = {abs(float(int(result)) - result)}")
     return result
 
 def my_pi_calc_v2(arg_input):
@@ -41,7 +44,7 @@ def my_pi_calc_v2(arg_input):
 def my_pi_calc_v3(arg_input):
     result = 0.0
     n = 0.0
-    for n in range(arg_input): 
+    while abs(float(int(result)) - result) < arg_input :
         result = result + 1/( (2*n + 1) * ((-3)**n) )
         n += 1.0
     return 4*result
@@ -49,11 +52,24 @@ def my_pi_calc_v3(arg_input):
 def my_pi(arg_input):
     result = 0.0
     n = 0.0
-    while ( result - float (int (result)) ) > arg_input:
+    while True:
         result = result + ((-1) ** n) / (2 * n + 1 )
         n += 1.0
+        print(4 * result)
     return 4 * result
-#переменные
+
+def my_pi_calc_v4(arg_input):
+    result = 0.0
+    iteration = int(round (log ((arg_input) ** (-1.0) , 10.0) ) )
+    print(iteration) 
+    for i in range(iteration) :
+        result = result + 16 ** (-i) * (4 / (8 * i + 1) - 2 / (8 * i + 4) - 1 / (8 * i + 5) - 1 / (8 * i + 6))
+        print(result) 
+    
+    result = float( int( result * (10 ** iteration) ) / (10 ** iteration) ) 
+    return result 
+
+
 in_value = ""
 out_quality_bad = True
 out_result = 0.0
@@ -71,4 +87,5 @@ while (out_quality_bad):
         break
 out_result = float (in_value)
 
-print(my_pi(out_result))
+print(my_pi_calc_v4(out_result))
+print(pi)
