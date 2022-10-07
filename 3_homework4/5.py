@@ -86,9 +86,9 @@ def my_data_analyzer(arg_input):
 data_lines_1 = [] #данные из первого файла, служебная информация
 data_lines_2 = [] #данные из второго файла, служебная информация
 data_result  = [] #данные для результирующего файла, служебная информация
-filename_1 = "D:\\Python\python_practice\\3_homework4\\Data_1.txt" # исходная информация 1, сгенерирования 4.Py
-filename_2 = "D:\\Python\python_practice\\3_homework4\\Data_2.txt" # исходная информация 2, сгенерирования 4.Py
-filename_result = "D:\\Python\python_practice\\3_homework4\\Data_result.txt" # результирующая информация
+filename_1 = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework4\\Data_1.txt" # исходная информация 1, сгенерирования 4.Py
+filename_2 = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework4\\Data_2.txt" # исходная информация 2, сгенерирования 4.Py
+filename_result = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework4\\Data_result.txt" # результирующая информация
 
 system('cls')
 

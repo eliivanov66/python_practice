@@ -42,8 +42,8 @@ in_value_int = 0
 out_quality_bad = True
 data_input = []
 out_result_str = ""
-filename_1 = "D:\\Python\python_practice\\3_homework4\\Data_1.txt"
-filename_2 = "D:\\Python\python_practice\\3_homework4\\Data_2.txt"
+filename_1 = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework4\\Data_1.txt"
+filename_2 = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework4\\Data_2.txt"
 filename_result = ""
 
 system('cls')
