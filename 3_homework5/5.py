@@ -4,37 +4,34 @@
 
 from os import system
 
-def my_data_extract():
+def my_data_extract(arg_value):
     '''метод извлечения исходной последовательности из строки'''
-    out_quality_bad = True
-    in_value = ""
-    while out_quality_bad:
-        in_value = input("Введите числовую последовательность через ПРОБЕЛ: ")
-        out_value = in_value.split()
-        out_quality_bad = False
-        for i in out_value:
-            if not i.isnumeric():
-                out_quality_bad = True
-                break
-            if i.isnumeric() and int(i) < 0:
-                out_quality_bad = True
-                break
-        if not out_quality_bad:
-            out_value = [int(x) for x in out_value]
-        if out_quality_bad:
-            system("cls")
-            print("Некорректный ввод последовательности")
+    out_quality_bad = False
+    out_value = f"{arg_value}".split()
+    for i in out_value:
+        if not i.isnumeric():
+            out_quality_bad = True
+            break
+        if i.isnumeric() and int(i) < 0:
+            out_quality_bad = True
+            break
+    if len(out_value) < 2:
+        out_quality_bad = True
+    if not out_quality_bad:
+        out_value = [int(x) for x in out_value]
+    if out_quality_bad:
+        return None
     return out_value
 
-def my_sequence_build(arg_data):
+def my_sequence_build(arg_value):
     '''генератор всевозможных возрастающих последовательностей для списка чисел'''
     out_result = []
-    for i in range(0, len(arg_data)):
+    for i in range(0, len(arg_value)):
         sub_result = []
-        sub_result.append(arg_data[i])
-        for j in range(i, len(arg_data)):
-            if max(arg_data[j], sub_result[- 1]) == arg_data[j]:
-                sub_result.append(arg_data[j])
+        sub_result.append(arg_value[i])
+        for j in range(i, len(arg_value)):
+            if max(arg_value[j], sub_result[- 1]) == arg_value[j]:
+                sub_result.append(arg_value[j])
         if (len(sub_result) > 2):
             sub_result.pop(0)
             out_result.append(sub_result)    
@@ -52,21 +49,35 @@ def my_sequence_build(arg_data):
     # return out_result
 
 # переменные
+filename_in = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework5\\Data_5_In.txt" # файлик источник
+filename_out = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework5\\Data_5_Out.txt" # файлик результат
 in_data = [] # исходный список
 out_data = [] # результат список с последовательностями
 
 system("cls")
 
 # ввод данных
-in_data = my_data_extract()
-# показать результат ввода
-print("Получен следующий список: ")
-print(in_data)
+with open(filename_in, "r", encoding="utf-8") as file:
+    temp_data = file.readline()
+in_data = my_data_extract(temp_data)
 
-# получение всех возможных комбинаций последовательностей
-out_data = my_sequence_build(in_data)
+if in_data != None:
+    # показать результат ввода
+    print("Получен следующий список: ")
+    print(in_data)
 
-# вывод результата
-print("Получен список возможных комбинаций возрастающих последовательностей")
-for data in out_data:
-    print(f"{out_data.index(data)}:{data}")
+    # получение всех возможных комбинаций последовательностей
+    out_data = my_sequence_build(in_data)
+
+    # вывод результата
+    print("Получен список возможных комбинаций возрастающих последовательностей")
+    for data in out_data:
+        print(f"{out_data.index(data)}:{data}")
+
+    with open(filename_out, "w", encoding="utf-8") as file:
+        file.write(f"Исходная последовательность {in_data}\n")
+        for data in out_data:
+            file.write(f"{out_data.index(data)}:{data}\n")
+
+else:
+    print("Исходный файл не содержит последовательности целых положительных чисел")
