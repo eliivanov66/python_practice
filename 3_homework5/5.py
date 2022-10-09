@@ -5,6 +5,7 @@
 from os import system
 
 def my_data_extract():
+    '''метод извлечения исходной последовательности из строки'''
     out_quality_bad = True
     in_value = ""
     while out_quality_bad:
@@ -25,7 +26,47 @@ def my_data_extract():
             print("Некорректный ввод последовательности")
     return out_value
 
-in_value = my_data_extract()
+def my_sequence_build(arg_data):
+    '''генератор всевозможных возрастающих последовательностей для списка чисел'''
+    out_result = []
+    for i in range(0, len(arg_data)):
+        sub_result = []
+        sub_result.append(arg_data[i])
+        for j in range(i, len(arg_data)):
+            if max(arg_data[j], sub_result[- 1]) == arg_data[j]:
+                sub_result.append(arg_data[j])
+        if (len(sub_result) > 2):
+            sub_result.pop(0)
+            out_result.append(sub_result)    
+            # out_result.append(my_sequence_build(sub_result))
+    for i in range(len(out_result)):
+        if len(out_result[i]) > 2:
+            temp_result = []
+            for j in range(1, len(out_result[i])):    
+                temp_result = out_result[i].copy()
+                temp_result.pop(j)
+                out_result.append(temp_result)
+    temp_result = []
+    [temp_result.append(a) for a in out_result if a not in temp_result ]
+    return temp_result
+    # return out_result
 
-print(in_value)
+# переменные
+in_data = [] # исходный список
+out_data = [] # результат список с последовательностями
 
+system("cls")
+
+# ввод данных
+in_data = my_data_extract()
+# показать результат ввода
+print("Получен следующий список: ")
+print(in_data)
+
+# получение всех возможных комбинаций последовательностей
+out_data = my_sequence_build(in_data)
+
+# вывод результата
+print("Получен список возможных комбинаций возрастающих последовательностей")
+for data in out_data:
+    print(f"{out_data.index(data)}:{data}")
