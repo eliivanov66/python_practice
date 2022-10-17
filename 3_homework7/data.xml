@@ -1,0 +1,33 @@
+<xml>
+   <!--alias-->
+   <_i_>phone#1</_i_>
+   <_f_>ivanov</_f_>
+   <_n_>ivan</_n_>
+   <_p_>320001</_p_>
+   <_p_>420020</_p_>
+   <_d_>user ivanov i.</_d_>
+   <!--alias-->
+   <_i_>phone#2</_i_>
+   <_f_>borisov</_f_>
+   <_n_>boris</_n_>
+   <_p_>320010</_p_>
+   <_d_>user borisov b.</_d_>
+   <!--alias-->
+   <_i_>phone#3</_i_>
+   <_f_>petrov</_f_>
+   <_n_>petr</_n_>
+   <_p_>320020</_p_>
+   <_d_>user petrov p.</_d_>
+   <!--alias-->
+   <_i_>phone#4</_i_>
+   <_f_>fedorov</_f_>
+   <_n_>fedor</_n_>
+   <_p_>320030</_p_>
+   <_d_>user fedorov f.</_d_>
+   <!--alias-->
+   <_i_>phone#5</_i_>
+   <_f_>sidorov</_f_>
+   <_n_>sidor</_n_>
+   <_p_>320040</_p_>
+   <_d_>user sidorov s.</_d_>
+</xml>
