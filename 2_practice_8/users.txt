@@ -1,0 +1,8 @@
+petrov_pp;345;petrov;petr;0;Русский язык;Учитель Русского языка;
+borisov_bb;234234;borisov;boris;0;Английский язык;Учитель Английского языка;
+setrov_ss;345;setrov;setr;0;Литература;Учитель Литературы;
+kuznecov_kk;new_password;kuznecov;konstantin;0;Физика;Учитель Физики;
+kuznecov_ka;kuznecov_password;kuznecov;konstantin;1;;Студент;
+st_1;st1_p1;Карпенко;Артур;1;;Студент;
+st_2;st2_p2;Пагосян;Михаил;1;;Студент;
+st_3;st3_p3;Сотнников;Юлия;1;;Студент;
