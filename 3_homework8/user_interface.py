@@ -1,11 +1,11 @@
 from data_storage import data_change as change
 from data_storage import data_read as read
 from data_storage import info_data
+import logger as log
 
 file_users = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework8\\users.txt"
 file_marks = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework8\\marks.txt"
 file_ht = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework8\\home_tasks.txt"
-
 
 def int_checker(input_text):
     while True:
@@ -145,8 +145,10 @@ def login_dialog():
             ret_value = data_read_req
         else:
             print(f"Неверный пароль")
+            log.logger(filename=log.default_filename, text=f"Ошибка авторизации пользователя {login}", value="неверный пароль")
             ret_value = -1
     else:
+        log.logger(filename=log.default_filename, text=f"Ошибка авторизации пользователя {login}", value="пользователь не найден")
         print("Пользователь не найден")
         ret_value = -1
     return ret_value
