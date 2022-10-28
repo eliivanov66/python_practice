@@ -30,7 +30,7 @@ def init_data():
     description = None
 
 def logic():
-    bot = TeleBot("5551738625:AAFE5AXjwLN0Deu7YqhZCQITpeP-YcQDQ04")
+    bot = TeleBot("")
     global file_db
     @bot.message_handler(commands=['start'])
     def startup(msg: telebot.types.Message):
