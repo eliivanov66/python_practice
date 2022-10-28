@@ -20,7 +20,7 @@ ai_count = 0
 game_running = 0
 
 move = randint(0,1)
-bot = TeleBot("5551738625:AAFE5AXjwLN0Deu7YqhZCQITpeP-YcQDQ04")
+bot = TeleBot("")
 
 @bot.message_handler()
 def echo(msg: telebot.types.Message):
