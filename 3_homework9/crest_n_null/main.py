@@ -85,7 +85,7 @@ game_over = 0
 game_running = 0
 
 
-bot = TeleBot("5551738625:AAFE5AXjwLN0Deu7YqhZCQITpeP-YcQDQ04")
+bot = TeleBot("")
 
 @bot.message_handler(commands=['start'])
 def startup(msg: telebot.types.Message):
