@@ -48,7 +48,7 @@ def logic():
             for line in lines:
                 if len(line) != 0:
                     log_is_empty = 0
-                bot.send_message(chat_id=msg.from_user.id , text=f" {line}")
+                bot.send_message(chat_id=msg.from_user.id , text=f"log: {line}")
             if log_is_empty:
                 bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором, файл лога пуст")
         bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел \nВведите строку для вычисления, для мнимой единицы используйте 'j'")
