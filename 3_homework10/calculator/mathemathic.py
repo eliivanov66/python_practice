@@ -96,7 +96,6 @@ def split_string_to_complex(arg_input):
         return complex(out_real, out_image)
 
 def formula_calculate(arg_input):
-    print(arg_input)
     global special_symbols
     start = None
     end = None
@@ -119,6 +118,10 @@ def formula_calculate(arg_input):
             if arg_input[i] == ")" and not (start is None):
                 end = i - 1
                 break
+        
+        if start == end and not (start is None) and not (end is None):
+            arg_input.pop(start - 1)
+            arg_input.pop(end)
 
         while start != end and not (start is None) and not (end is None):
             temp = formula_calculate(arg_input[start: end + 1])  

@@ -68,6 +68,7 @@ def logic():
         else:
             bot.send_document(chat_id=msg.from_user.id, document=open(file_log, "r", encoding="utf-8"))
 
+
     @bot.message_handler(content_types=['text'])
     def control_logic(msg: telebot.types.Message):
         global file_log
