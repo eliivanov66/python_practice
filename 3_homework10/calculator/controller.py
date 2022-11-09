@@ -29,7 +29,7 @@ def logic():
 
     @bot.message_handler(commands=['info'])
     def info(msg: telebot.types.Message):
-        bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел /nВведите строку для вычисления, для мнимой единицы используйте 'i'")
+        bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел. \nВведите строку для вычисления, для мнимой единицы используйте 'j'")
     
     @bot.message_handler(commands=['log'])
     def log(msg: telebot.types.Message):
@@ -42,11 +42,32 @@ def logic():
                     line = line.replace(";"," ")         
         except FileNotFoundError:
             bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором, файл лога отсутсвует")
-            bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел /nВведите строку для вычисления, для мнимой единицы используйте 'i'")
+            bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел \nВведите строку для вычисления, для мнимой единицы используйте 'j'")
         else:
+            log_is_empty = 1
             for line in lines:
-                bot.send_message(chat_id=msg.from_user.id , text=f"{line}")
-        
+                if len(line) != 0:
+                    log_is_empty = 0
+                bot.send_message(chat_id=msg.from_user.id , text=f" {line}")
+            if log_is_empty:
+                bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором, файл лога пуст")
+        bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел \nВведите строку для вычисления, для мнимой единицы используйте 'j'")
+    
+    @bot.message_handler(commands=['downloadlog'])
+    def log(msg: telebot.types.Message):
+        global file_log
+        '''выгрузка лога в файл'''
+        try:
+            with open(file_log, "r", encoding="utf-8") as f_log:
+                lines = f_log.readlines()
+                for line in lines:
+                    line = line.replace(";"," ")         
+        except FileNotFoundError:
+            bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором, файл лога отсутсвует")
+            bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел \nВведите строку для вычисления, для мнимой единицы используйте 'j'")
+        else:
+            bot.send_document(chat_id=msg.from_user.id, document=open(file_log, "r", encoding="utf-8"))
+
     @bot.message_handler(content_types=['text'])
     def control_logic(msg: telebot.types.Message):
         global file_log
@@ -64,6 +85,6 @@ def logic():
             bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором, Вы ввели некорректную формулу {input_value}")
             logger.logger(file_log, f"Пользователь {msg.from_user.full_name}: Ввёл некорректную формулу {input_value}", "")
         
-        bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел /nВведите строку для вычисления, для мнимой единицы используйте 'i'")
+        bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел \nВведите строку для вычисления, для мнимой единицы используйте 'j'")
     
     bot.polling()

@@ -1,6 +1,6 @@
 import logger
 
-special_symbols = ["*", "/", "+", "-", "(", ")", "i"]
+special_symbols = ["*", "/", "+", "-", "(", ")", "j"]
 
 def string_to_formula(arg_input):
     global special_symbols
@@ -9,7 +9,8 @@ def string_to_formula(arg_input):
     # разделяем значимые данные пробелом
     arg_input = arg_input.replace(" ", "")
     arg_input = arg_input.replace(",", ".")
-    arg_input = arg_input.replace("*i", "i")
+    arg_input = arg_input.replace("i", "j")
+    arg_input = arg_input.replace("*j", "j")
     
     while ("--" in arg_input):
         arg_input = arg_input.replace("--", "+")
@@ -18,11 +19,11 @@ def string_to_formula(arg_input):
         arg_input = arg_input.replace("-+", "-")
     
     for i in special_symbols:
-        while i*2 in arg_input and (i != "i"):
+        while i*2 in arg_input and (i != "j"):
             arg_input = arg_input.replace(i*2, i)
 
     for i in special_symbols:
-        if i != "i":
+        if i != "j":
             arg_input = arg_input.replace(i, f" {i} ")
     
     if arg_input[0:2] == " +" or arg_input[0:2] == " *" or arg_input[0:2] == " /":
@@ -32,8 +33,19 @@ def string_to_formula(arg_input):
 
     arg_input = arg_input.split()
 
+    for i in range(1, len(arg_input)):
+        if arg_input[i] == "(" and (arg_input[i - 1].replace(".","").replace("-","").isnumeric() or "j" in arg_input[i - 1]):
+            arg_input.insert(i, "*")
+    for i in range(1, len(arg_input)):
+        if arg_input[i - 1] == ")" and (arg_input[i].replace(".","").replace("-","").isnumeric() or "j" in arg_input[i]):
+            arg_input.insert(i, "*")
+
+    if arg_input[0] == "(" and arg_input[-1] == ")":
+        arg_input.pop(0)
+        arg_input.pop(-1)
+
     for i in arg_input:
-        if not i.replace(".","").replace("-","").isnumeric() and (i not in special_symbols) and ("i" not in i):
+        if not i.replace(".","").replace("-","").isnumeric() and (i not in special_symbols) and ("j" not in i):
             return None
 
     # анализ скобок, их количество, тот факт что направления скобок не совпадают
@@ -53,7 +65,38 @@ def string_to_formula(arg_input):
     arg_input = [float(i) if i.replace(".","").replace("-","").isnumeric() else str(i) for i in arg_input]
     return arg_input
 
+def split_string_to_complex(arg_input):
+    
+    out_real = 0.0
+    out_image = 0.0
+
+    if type(arg_input) is complex:
+        return arg_input
+    else:
+        if not ("j" in str(arg_input)):
+            out_real = float(arg_input)
+            out_image = 0.0      
+        else:
+            temp_var = str(arg_input)
+            
+            if  temp_var == "j":
+                out_real = 0
+                out_image = 1
+            else:
+                temp_var = temp_var.split("j")
+                if temp_var[1] == "":
+                    temp_var[1] = 0
+                    out_real = float(temp_var[1])
+                    out_image = float(temp_var[0])
+
+                if temp_var[0] == "":
+                    temp_var[0] = 0
+                    out_real = float(temp_var[0])
+                    out_image = float(temp_var[1])
+        return complex(out_real, out_image)
+
 def formula_calculate(arg_input):
+    print(arg_input)
     global special_symbols
     start = None
     end = None
@@ -61,7 +104,7 @@ def formula_calculate(arg_input):
     
     i_number = 0
     for i in str(arg_input):
-        if "i" in str(i):
+        if "j" in str(i):
             i_number = 1
             break
 
@@ -171,55 +214,21 @@ def formula_calculate(arg_input):
         while ("*" in arg_input) or ("/" in arg_input):
             for i in range(1, range_high): 
                 if arg_input[i] == "*":
-                    i_count = 0
-                    if ("i" in str(arg_input[i - 1])) and ("i" in str(arg_input[i + 1])):
-                        i_count += str(arg_input[i - 1]).count("i")
-                        i_count += str(arg_input[i + 1]).count("i")
-                        arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                        arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-                        out_result =f"{str(arg_input[i - 1] * arg_input[i + 1])} {'i' * i_count}"
-                    elif ("i" in str(arg_input[i - 1])) and not ("i" in str(arg_input[i + 1])):
-                        # arg_input[i - 1] = str(arg_input[i - 1])
-                        
-                        # # умножается лишь верхняя часть
-                        # sep_arg_input = arg_input[i - 1][0: (str(arg_input[i - 1]).find("/") if str(arg_input[i - 1]).find("/") != -1 else len(arg_input[i - 1]))]
-                        # print(sep_arg_input)
-                        i_count += str(arg_input[i - 1]).count("i")
-                        i_count += str(arg_input[i + 1]).count("i")
-
-                        arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                        arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-                        out_result =f"{str(arg_input[i - 1] * arg_input[i + 1])} {'i' * i_count}"
-                    else:
-                        arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                        arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-                        out_result = arg_input[i - 1] * arg_input[i + 1]
+                    arg_input[i - 1] = split_string_to_complex(arg_input[i - 1])
+                    arg_input[i + 1] = split_string_to_complex(arg_input[i + 1])
+                    out_result = arg_input[i - 1] * arg_input[i + 1]
                     arg_input[i] = out_result
                     arg_input.pop(i + 1)
                     arg_input.pop(i - 1)
                     range_high = len(arg_input)
                     break
                 if arg_input[i] == "/":
-                    i_count = 0
-                    if arg_input[i + 1] == "0" or arg_input[i + 1] == "0i":
+                    if str(arg_input[i + 1]) == "0.0" or str(arg_input[i + 1]) == "0.0j":
                         return None
                     else:
-                        if ("i" in str(arg_input[i - 1])) and ("i" in str(arg_input[i + 1])):
-                            i_count += str(arg_input[i - 1]).count("i")
-                            i_count -= str(arg_input[i + 1]).count("i")
-                            arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                            arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-                            out_result = f"{str(arg_input[i - 1] / arg_input[i + 1])} {'i' * i_count}"
-                        elif ("i" in str(arg_input[i - 1])) and not ("i" in str(arg_input[i + 1])):
-                            i_count += str(arg_input[i - 1]).count("i")
-                            i_count -= str(arg_input[i + 1]).count("i")
-                            arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                            arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-                            out_result = f"{str(arg_input[i - 1] / arg_input[i + 1])} {'i' * i_count}"
-                        elif not ("i" in str(arg_input[i - 1])) and ("i" in str(arg_input[i + 1])):
-                            out_result = f"{str(arg_input[i - 1])} / {arg_input[i + 1]}"
-                        else:
-                            out_result = arg_input[i - 1] / arg_input[i + 1]
+                        arg_input[i - 1] = split_string_to_complex(arg_input[i - 1])
+                        arg_input[i + 1] = split_string_to_complex(arg_input[i + 1])
+                        out_result = arg_input[i - 1] / arg_input[i + 1]
                         arg_input[i] = out_result
                         arg_input.pop(i + 1)
                         arg_input.pop(i - 1)
@@ -230,46 +239,21 @@ def formula_calculate(arg_input):
         while ("+" in arg_input) or ("-" in arg_input):
             for i in range(1, range_high): 
                 if arg_input[i] == "+":
-                    i_count_1 = str(arg_input[i - 1]).count("i") 
-                    i_count_2 = str(arg_input[i + 1]).count("i")
-                    
-                    arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                    arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-
-                    if (i_count_1 == i_count_2) and (i_count_1 !=0):
-                        out_result = f"{str(arg_input[i - 1] + arg_input[i + 1])} {'i' * i_count_1}"
-                    elif  (i_count_1 != i_count_2):
-                        out_result = f"{str(arg_input[i - 1])}{'i' * i_count_1} + {str(arg_input[i + 1])} {'i' * i_count_2}"
-                    else:
-                        out_result = arg_input[i - 1] + arg_input[i + 1]
-
+                    arg_input[i - 1] = split_string_to_complex(arg_input[i - 1])
+                    arg_input[i + 1] = split_string_to_complex(arg_input[i + 1])
+                    out_result = arg_input[i - 1] + arg_input[i + 1]
                     arg_input[i] = out_result
                     arg_input.pop(i + 1)
                     arg_input.pop(i - 1)
                     range_high = len(arg_input)
                     break
                 if arg_input[i] == "-":
-                    i_count_1 = str(arg_input[i - 1]).count("i") 
-                    i_count_2 = str(arg_input[i + 1]).count("i")
-
-                    arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
-                    arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
-
-                    if (i_count_1 == i_count_2) and (i_count_1 !=0):
-                        out_result = f"{str(arg_input[i - 1] + arg_input[i + 1])} {'i' * i_count_1}"
-                    elif  (i_count_1 != i_count_2):
-                        out_result = f"{str(arg_input[i - 1])}{'i' * i_count_1} - {str(arg_input[i + 1])} {'i' * i_count_2}"
-                    else:
-                        out_result = arg_input[i - 1] - arg_input[i + 1]
-
+                    arg_input[i - 1] = split_string_to_complex(arg_input[i - 1])
+                    arg_input[i + 1] = split_string_to_complex(arg_input[i + 1])
+                    out_result = arg_input[i - 1] - arg_input[i + 1]
                     arg_input[i] = out_result
                     arg_input.pop(i + 1)
                     arg_input.pop(i - 1)
                     range_high = len(arg_input)
                     break
         return out_result
-
-tes = "(4i+5/7i) * 3"
-tes = string_to_formula(tes)
-print(tes)
-print(formula_calculate(tes))
