@@ -1,1 +1,0 @@
-file_log = "C:\\Python\\Diagram_n_code\\python_practice\\3_homework9\\calculator\\log.csv"

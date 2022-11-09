@@ -1,17 +1,24 @@
 
 
 from dataclasses import replace
-import file_path
 import mathemathic
 import logger
 from telebot import TeleBot
 import telebot
+import os
 
-file_log = file_path.file_log
+#пути к файлу
+file_log = os.path.abspath(__file__)
+file_log = file_log.replace(str(chr(92)), 2*str(chr(92)))
+file_log = file_log.replace("controller.py", "log.csv")
+
 
 def logic():
+    #пути к файлу
+    global file_log
+
     bot = TeleBot("")
-    global file_db
+
     @bot.message_handler(commands=['start'])
     def startup(msg: telebot.types.Message):
         bot.send_message(chat_id=msg.from_user.id , text=f"Кнопка 'Start' бесполезна калькулятору")
@@ -40,7 +47,6 @@ def logic():
             for line in lines:
                 bot.send_message(chat_id=msg.from_user.id , text=f"{line}")
         
-
     @bot.message_handler(content_types=['text'])
     def control_logic(msg: telebot.types.Message):
         global file_log
@@ -57,5 +63,7 @@ def logic():
         else:
             bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором, Вы ввели некорректную формулу {input_value}")
             logger.logger(file_log, f"Пользователь {msg.from_user.full_name}: Ввёл некорректную формулу {input_value}", "")
+        
         bot.send_message(chat_id=msg.from_user.id , text=f"Бот с калькулятором действительных и комплексных чисел /nВведите строку для вычисления, для мнимой единицы используйте 'i'")
+    
     bot.polling()

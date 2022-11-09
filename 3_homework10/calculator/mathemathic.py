@@ -96,6 +96,8 @@ def formula_calculate(arg_input):
         while ("*" in arg_input) or ("/" in arg_input):
             for i in range(1, range_high): 
                 if arg_input[i] == "*":
+                    arg_input[i - 1] = float(arg_input[i - 1])
+                    arg_input[i + 1] = float(arg_input[i + 1]) 
                     out_result = arg_input[i - 1] * arg_input[i + 1]
                     arg_input[i] = out_result
                     arg_input.pop(i + 1)
@@ -103,6 +105,8 @@ def formula_calculate(arg_input):
                     range_high = len(arg_input)
                     break
                 if arg_input[i] == "/":
+                    arg_input[i - 1] = float(arg_input[i - 1])
+                    arg_input[i + 1] = float(arg_input[i + 1]) 
                     if arg_input[i + 1] == 0:
                         return None
                     else:
@@ -117,6 +121,8 @@ def formula_calculate(arg_input):
         while ("+" in arg_input) or ("-" in arg_input):
             for i in range(1, range_high): 
                 if arg_input[i] == "+":
+                    arg_input[i - 1] = float(arg_input[i - 1])
+                    arg_input[i + 1] = float(arg_input[i + 1]) 
                     out_result = arg_input[i - 1] + arg_input[i + 1]
                     arg_input[i] = out_result
                     arg_input.pop(i + 1)
@@ -124,6 +130,8 @@ def formula_calculate(arg_input):
                     range_high = len(arg_input)
                     break
                 if arg_input[i] == "-":
+                    arg_input[i - 1] = float(arg_input[i - 1])
+                    arg_input[i + 1] = float(arg_input[i + 1]) 
                     out_result = arg_input[i - 1] - arg_input[i + 1]
                     arg_input[i] = out_result
                     arg_input.pop(i + 1)
@@ -170,9 +178,15 @@ def formula_calculate(arg_input):
                         arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
                         arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
                         out_result =f"{str(arg_input[i - 1] * arg_input[i + 1])} {'i' * i_count}"
-                    elif ("i" in str(arg_input[i - 1])) or ("i" in str(arg_input[i + 1])):
+                    elif ("i" in str(arg_input[i - 1])) and not ("i" in str(arg_input[i + 1])):
+                        # arg_input[i - 1] = str(arg_input[i - 1])
+                        
+                        # # умножается лишь верхняя часть
+                        # sep_arg_input = arg_input[i - 1][0: (str(arg_input[i - 1]).find("/") if str(arg_input[i - 1]).find("/") != -1 else len(arg_input[i - 1]))]
+                        # print(sep_arg_input)
                         i_count += str(arg_input[i - 1]).count("i")
                         i_count += str(arg_input[i + 1]).count("i")
+
                         arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
                         arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
                         out_result =f"{str(arg_input[i - 1] * arg_input[i + 1])} {'i' * i_count}"
@@ -218,14 +232,14 @@ def formula_calculate(arg_input):
                 if arg_input[i] == "+":
                     i_count_1 = str(arg_input[i - 1]).count("i") 
                     i_count_2 = str(arg_input[i + 1]).count("i")
-
+                    
                     arg_input[i - 1] = float(str(arg_input[i - 1]).replace("i",""))
                     arg_input[i + 1] = float(str(arg_input[i + 1]).replace("i",""))
 
                     if (i_count_1 == i_count_2) and (i_count_1 !=0):
                         out_result = f"{str(arg_input[i - 1] + arg_input[i + 1])} {'i' * i_count_1}"
                     elif  (i_count_1 != i_count_2):
-                        out_result = f"{str(arg_input[i - 1])}{'i' * i_count_2} + {str(arg_input[i + 1])} {'i' * i_count_2}"
+                        out_result = f"{str(arg_input[i - 1])}{'i' * i_count_1} + {str(arg_input[i + 1])} {'i' * i_count_2}"
                     else:
                         out_result = arg_input[i - 1] + arg_input[i + 1]
 
@@ -244,7 +258,7 @@ def formula_calculate(arg_input):
                     if (i_count_1 == i_count_2) and (i_count_1 !=0):
                         out_result = f"{str(arg_input[i - 1] + arg_input[i + 1])} {'i' * i_count_1}"
                     elif  (i_count_1 != i_count_2):
-                        out_result = f"{str(arg_input[i - 1])}{'i' * i_count_2} - {str(arg_input[i + 1])} {'i' * i_count_2}"
+                        out_result = f"{str(arg_input[i - 1])}{'i' * i_count_1} - {str(arg_input[i + 1])} {'i' * i_count_2}"
                     else:
                         out_result = arg_input[i - 1] - arg_input[i + 1]
 
@@ -255,7 +269,7 @@ def formula_calculate(arg_input):
                     break
         return out_result
 
-test_var = "-2 / 7i"
-
-print(string_to_formula(test_var))
-print(formula_calculate(string_to_formula(test_var)))
+tes = "(4i+5/7i) * 3"
+tes = string_to_formula(tes)
+print(tes)
+print(formula_calculate(tes))
